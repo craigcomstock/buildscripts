@@ -1,0 +1,11 @@
+--- xpath.c.orig        Tue Apr 17 07:48:16 2018
++++ xpath.c     Tue Apr 17 07:48:28 2018
+@@ -482,7 +482,7 @@
+ #endif
+
+ #ifndef INFINITY
+-#define INFINITY HUGE_VAL
++#define INFINITY DBL_MAX
+ #endif
+
+ double xmlXPathNAN = NAN;
