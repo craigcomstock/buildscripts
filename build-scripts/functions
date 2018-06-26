@@ -148,10 +148,14 @@ uninstall_debs()
     PKGS=`dpkg -l | tail -n+6 | awk '{print $2}' | grep '^'$1'$' || true`
     if [ -n "$PKGS" ]
     then
+        which dpkg
+        dpkg --version
         for p in $PKGS
         do
             dpkg --status $p
-            dpkg --audit $p
+            dpkg --verify $p
+# apparently --audit [package-name...] is only available since dpkg 1.17.10, apparently travis doesn't have newer version
+#            dpkg --audit $p
         done
         sudo dpkg --audit
         sudo dpkg --help
