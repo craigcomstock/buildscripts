@@ -110,9 +110,11 @@ case "$JOB" in
         ./buildscripts/build-scripts/compile
         # ./buildscripts/build-scripts/test
         echo "debug uninstall_debs"
+        set -x
         sudo dpkg -l cfbuild-.*-devel || true
         sudo dpkg --dry-run --purge cf-build-.*-devel || true
         ./buildscripts/build-scripts/package
+        set +x
         ./buildscripts/build-scripts/prepare-results
 
         s3cmd put --reduced-redundancy --no-progress --acl-public \
