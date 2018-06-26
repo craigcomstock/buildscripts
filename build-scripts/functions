@@ -148,32 +148,10 @@ uninstall_debs()
     PKGS=`dpkg -l | tail -n+6 | awk '{print $2}' | grep '^'$1'$' || true`
     if [ -n "$PKGS" ]
     then
-        which dpkg
-        dpkg --version
-        dpkg --help
-        for p in $PKGS
-        do
-            dpkg --status $p
-        done
-
-set +e
-        sudo dpkg --debug=3773 --dry-run --purge $PKGS
-        ret=$?
-        echo "ret=$ret"
-
-        retry_wrapper  sudo dpkg --debug=3773 --dry-run --purge $PKGS
-        retry_wrapper  sudo dpkg --debug=3773 --purge $PKGS || echo "oloy"
-
-        sudo dpkg --debug=3773 --audit
-        ret=$?
-        echo "ret=$ret"
-
-        sudo apt-get --purge remove $PKGS || echo "alay"    
-        ret=$?
-        echo "ret=$ret"
-
-        sleep 5 # to try and make sure logs get out
-set -e
+        set -x
+        retry_wrapper sudo apt-get --purge remove $PKGS
+        sudo apt-get -o Debug::*::*=true --purge remove $PKGS
+        set +x
     fi
 }
 uninstall_solaris_pkgs()
