@@ -154,7 +154,7 @@ uninstall_debs()
         for p in $PKGS
         do
             dpkg --status $p
-            dpkg --verify $p
+#            dpkg --verify $p  # ditto, only in 1.17.2+ and we are at 1.16.1.2 on travis
 # apparently --audit [package-name...] is only available since dpkg 1.17.10, apparently travis doesn't have newer version
 #            dpkg --audit $p
         done
