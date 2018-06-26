@@ -156,6 +156,8 @@ uninstall_debs()
         ls -l /var/log/apt
         echo "this is stdout" > /dev/stdout
         echo "this is stderr" > /dev/stderr
+        which tail
+        sudo echo $PATH
         sudo tail -n 100 /var/log/apt/history.log 1>&2
         echo $?
         sudo tail -n 100 /var/log/apt/term.log 1>&2
