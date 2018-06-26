@@ -158,10 +158,12 @@ uninstall_debs()
 # apparently --audit [package-name...] is only available since dpkg 1.17.10, apparently travis doesn't have newer version
 #            dpkg --audit $p
         done
+set +e
         sudo dpkg --audit
         sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --purge $PKGS || echo "oloy"
+set -e
     fi
 }
 uninstall_solaris_pkgs()
