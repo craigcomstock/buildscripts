@@ -104,6 +104,7 @@ case "$JOB" in
         # cleaning not needed, since Travis always gives us a clean VM
         # ./buildscripts/build-scripts/clean-buildmachine
         ./buildscripts/build-scripts/build-environment-check
+ls -l ./buildscripts/build-scripts
         ./buildscripts/build-scripts/install-dependencies
         ./buildscripts/build-scripts/configure
         ./buildscripts/build-scripts/generate-source-tarballs
