@@ -159,7 +159,7 @@ uninstall_debs()
         echo "ret=$ret"
         set +x
         set -e
-        if $ret
+        if [ $ret ]
         then
             echo "things went alright"
         else
