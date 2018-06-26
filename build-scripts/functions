@@ -148,32 +148,11 @@ uninstall_debs()
     PKGS=`dpkg -l | tail -n+6 | awk '{print $2}' | grep '^'$1'$' || true`
     if [ -n "$PKGS" ]
     then
-        set +e
-        set -x
-        sudo apt-get install
-        echo $?
-        ls -l /var/log
-        ls -l /var/log/apt
-        echo "this is stdout" > /dev/stdout
-        echo "this is stderr" > /dev/stderr
-        which tail
-        sudo echo $PATH
-        sudo tail -n 100 /var/log/apt/history.log 1>&2
-        echo $?
-        sudo tail -n 100 /var/log/apt/term.log 1>&2
-        echo $?
-        sudo apt-get --purge remove $PKGS
-        echo $?
-        sudo apt-get remove $PKGS
-        echo $?
-        sudo apt-get purge $PKGS
-        echo $?
+# this one works!!!
+#        sudo apt-get --purge remove $PKGS
+#        echo $?
         retry_wrapper sudo apt-get --purge remove $PKGS
         echo $?
-        sudo apt-get -o Debug::*::*=true --purge remove $PKGS
-        echo $?
-        set -e
-        set +x
     fi
 }
 uninstall_solaris_pkgs()
@@ -581,17 +560,19 @@ retry_wrapper()
     do
         echo "* retry_wrapper:  $operation"
 
-	if $operation
+        $operation
+        ret=$?
+	    if $ret
         then
-	    echo "* SUCCESS"
+	       echo "* SUCCESS"
             return 0
         else
             err_ret=$?
             maxtries=`expr $maxtries - 1`
-	    echo "* FAILURE $err_ret"
+	        echo "* FAILURE $err_ret"
             echo "* Sleeping for:  $pause seconds"
             echo "* Retries left:  $maxtries"
-	    $SLEEP $pause
+	        $SLEEP $pause
         fi
     done
 
