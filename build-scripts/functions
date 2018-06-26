@@ -161,7 +161,7 @@ uninstall_debs()
         sudo dpkg --audit
         sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --dry-run --purge $PKGS
-        retry_wrapper  sudo dpkg --purge $PKGS
+        retry_wrapper  sudo dpkg --purge $PKGS || echo "oloy"
     fi
 }
 uninstall_solaris_pkgs()
