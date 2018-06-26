@@ -160,9 +160,14 @@ uninstall_debs()
         done
 set +e
         sudo dpkg --dry-run --purge $PKGS
+        ret=$?
+        echo "ret=$ret"
         retry_wrapper  sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --purge $PKGS || echo "oloy"
         sudo dpkg --audit
+        ret=$?
+        echo "ret=$ret"
+        sleep 5 # to try and make sure logs get out
 set -e
     fi
 }
