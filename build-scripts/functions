@@ -159,10 +159,10 @@ uninstall_debs()
 #            dpkg --audit $p
         done
 set +e
-        sudo dpkg --audit
         sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --purge $PKGS || echo "oloy"
+        sudo dpkg --audit
 set -e
     fi
 }
