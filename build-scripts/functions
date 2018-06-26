@@ -154,9 +154,11 @@ uninstall_debs()
         echo $?
         ls -l /var/log
         ls -l /var/log/apt
-        sudo tail -n 100 /var/log/apt/history.log
+        echo "this is stdout" > /dev/stdout
+        echo "this is stderr" > /dev/stderr
+        sudo tail -n 100 /var/log/apt/history.log 1>&2
         echo $?
-        sudo tail -n 100 /var/log/apt/term.log
+        sudo tail -n 100 /var/log/apt/term.log 1>&2
         echo $?
         sudo apt-get --purge remove $PKGS
         echo $?
