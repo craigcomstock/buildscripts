@@ -154,7 +154,7 @@ uninstall_debs()
 # this one works!!!
         set +e
         set -x
-        sudo apt-get --purge remove $PKGS
+        sudo -s apt-get --purge remove $PKGS
         ret=$?
         echo "ret=$ret"
         set +x
