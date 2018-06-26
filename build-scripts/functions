@@ -148,11 +148,14 @@ uninstall_debs()
     PKGS=`dpkg -l | tail -n+6 | awk '{print $2}' | grep '^'$1'$' || true`
     if [ -n "$PKGS" ]
     then
+# try to figure out why retry_wrapper fails on this
+        which bash
+        bash --version
 # this one works!!!
-#        sudo apt-get --purge remove $PKGS
-#        echo $?
-        retry_wrapper sudo apt-get --purge remove $PKGS
+        sudo apt-get --purge remove $PKGS
         echo $?
+#        retry_wrapper sudo apt-get --purge remove $PKGS
+#        echo $?
     fi
 }
 uninstall_solaris_pkgs()
@@ -562,7 +565,7 @@ retry_wrapper()
 
         if $operation
         then
-	       echo "* SUCCESS"
+	        echo "* SUCCESS"
             return 0
         else
             err_ret=$?
