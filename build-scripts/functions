@@ -150,6 +150,7 @@ uninstall_debs()
     then
         which dpkg
         dpkg --version
+        dpkg --help
         for p in $PKGS
         do
             dpkg --status $p
@@ -158,7 +159,6 @@ uninstall_debs()
 #            dpkg --audit $p
         done
         sudo dpkg --audit
-        sudo dpkg --help
         sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --dry-run --purge $PKGS
         retry_wrapper  sudo dpkg --purge $PKGS
