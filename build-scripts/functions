@@ -154,19 +154,24 @@ uninstall_debs()
         for p in $PKGS
         do
             dpkg --status $p
-#            dpkg --verify $p  # ditto, only in 1.17.2+ and we are at 1.16.1.2 on travis
-# apparently --audit [package-name...] is only available since dpkg 1.17.10, apparently travis doesn't have newer version
-#            dpkg --audit $p
         done
+
 set +e
-        sudo dpkg --dry-run --purge $PKGS
+        sudo dpkg --debug=3773 --dry-run --purge $PKGS
         ret=$?
         echo "ret=$ret"
-        retry_wrapper  sudo dpkg --dry-run --purge $PKGS
-        retry_wrapper  sudo dpkg --purge $PKGS || echo "oloy"
-        sudo dpkg --audit
+
+        retry_wrapper  sudo dpkg --debug=3773 --dry-run --purge $PKGS
+        retry_wrapper  sudo dpkg --debug=3773 --purge $PKGS || echo "oloy"
+
+        sudo dpkg --debug=3773 --audit
         ret=$?
         echo "ret=$ret"
+
+        sudo apt-get --purge remove $PKGS || echo "alay"    
+        ret=$?
+        echo "ret=$ret"
+
         sleep 5 # to try and make sure logs get out
 set -e
     fi
