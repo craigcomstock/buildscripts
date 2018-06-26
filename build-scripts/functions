@@ -148,11 +148,15 @@ uninstall_debs()
     PKGS=`dpkg -l | tail -n+6 | awk '{print $2}' | grep '^'$1'$' || true`
     if [ -n "$PKGS" ]
     then
-        set -x
+        set -ex
         sudo apt-get install
         echo $?
+        ls -l /var/log
+        ls -l /var/log/apt
         sudo tail -n 100 /var/log/apt/history.log
+        echo $?
         sudo tail -n 100 /var/log/apt/term.log
+        echo $?
         sudo apt-get --purge remove $PKGS
         echo $?
         sudo apt-get remove $PKGS
@@ -163,7 +167,7 @@ uninstall_debs()
         echo $?
         sudo apt-get -o Debug::*::*=true --purge remove $PKGS
         echo $?
-        set +x
+        set +ex
     fi
 }
 uninstall_solaris_pkgs()
