@@ -152,8 +152,20 @@ uninstall_debs()
         which bash
         bash --version
 # this one works!!!
+        set +e
+        set -x
         sudo apt-get --purge remove $PKGS
-        echo $?
+        ret=$?
+        echo "ret=$ret"
+        set +x
+        set -e
+        if $ret
+        then
+            echo "things went alright"
+        else
+            echo "things went bad"
+            return 99 
+        fi
 #        retry_wrapper sudo apt-get --purge remove $PKGS
 #        echo $?
     fi
