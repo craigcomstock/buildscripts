@@ -560,9 +560,7 @@ retry_wrapper()
     do
         echo "* retry_wrapper:  $operation"
 
-        $operation
-        ret=$?
-	    if $ret
+        if $operation
         then
 	       echo "* SUCCESS"
             return 0
