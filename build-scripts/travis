@@ -26,7 +26,7 @@ set -x
 # remove unwanted packages
 sudo apt-get purge apache* "postgresql*" redis*
 # On Travis, hostname can be ridiculously long - let's truncate it
-sudo hostname localhost
+#sudo hostname localhost
 
 # Purge saved lists to avoid "Hash Sum mismatch" apt-get error on the next line
 sudo rm -rf /var/lib/apt/lists/*
@@ -79,7 +79,7 @@ case "$JOB" in
                 )
             fi
             else
-                git clone -b "$TRAVIS_BRANCH" git@github.com:cfengine/$i.git
+                git clone -b "$TRAVIS_BRANCH" git@github.com:$TRAVIS_GIT_USER/$i.git
             fi
         done
 
@@ -132,8 +132,8 @@ case "$JOB" in
         touch /home/travis/rpmvercmp
         chmod a+x ~/rpmvercmp
         cd ..
-        test -d core || git clone -b "$TRAVIS_BRANCH" git@github.com:cfengine/core.git
-        test -d enterprise || git clone -b "$TRAVIS_BRANCH" git@github.com:cfengine/enterprise.git
+        test -d core || git clone -b "$TRAVIS_BRANCH" git@github.com:$TRAVIS_GIT_USER/core.git
+        test -d enterprise || git clone -b "$TRAVIS_BRANCH" git@github.com:$TRAVIS_GIT_USER/enterprise.git
         chmod -R u+w */tests/acceptance
         chmod -R g-w */tests/acceptance
         cd core/tests/acceptance
