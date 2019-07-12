@@ -209,6 +209,18 @@ case "$JOB" in
         sudo prove -v *.test
     ;;
 
+    ( schema-test )
+        # NOTE: these tests will manipulate the system "cfdb" database
+        # so parallel execution is not possible
+        s3cmd get --no-progress $DEB_PACKAGE cfe.deb
+        sudo dpkg -i cfe.deb
+        sudo service cfengine3 restart
+        export NTECH=$(pwd)
+        git clone git@github.com:cfengine/mission-portal.git
+        cd nova/tests/schema
+        sudo prove -v *.test
+    ;;
+        
     ( deployment-test )
         s3cmd get --no-progress $DEB_PACKAGE cfe.deb
         sudo dpkg -i cfe.deb
