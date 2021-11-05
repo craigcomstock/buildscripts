@@ -46,7 +46,7 @@ detected_versions=`echo $projects  \
 number_of_different_versions=`echo $detected_versions  \
     | tr ' ' '\n'  \
     | sed -e 's/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/'  \
-    | uniq  |  wc -l`
+    | uniq  |  wc -l | xargs`
 
 if [ x"$number_of_different_versions" != x1 ]
 then
