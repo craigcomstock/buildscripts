@@ -18,6 +18,7 @@ if ! buildah images --quiet "$BASE_IMAGE"; then
   tmp=$(buildah from ubuntu)
   # TODO make more different scripts or even policy to install deps on various platforms
   buildah copy $tmp deps-debian.sh
+  # TODO add DEBIAN_FRONTEND=noninteractive here to avoid tzdata prompts?
   time buildah run $tmp -- bash -x deps-debian.sh
   time buildah commit $tmp $BASE_IMAGE
   buildah rm $tmp

@@ -2,9 +2,15 @@
 
 ## Basic Usage
 
-A pre-requisite is to have necessary repositories checked out along-side each other.
-
 A minimal example would be to build packages for cfengine community agent.
+
+Install necessary distribution packages. For example on debian/ubuntu:
+
+```
+include::deps-debian.sh[]
+```
+
+Get the cfengine source code:
 
 ```
 include::checkout-community-agent.sh[]
@@ -16,49 +22,10 @@ Set some environment variables:
 include::env-community-agent.sh[]
 ```
 
-And execute the build steps:
+Execute the build steps and see that packages are generated:
 
 ```
 include::build-community-agent.sh[]
-```
-
-## Minimal Build Example (using containers with buildah)
-
-Here we give a minimal build example using a linux container, setting environment variables "manually" and running a series of commands.
-
-This example does NOT use a remote sftp cache of built packages or downloaded source tarballs.
-It does also not rely on any ssh configuration or special accounts to be created.
-
-### Dependencies on host system
-
-```
-$ sudo apt install buildah
-```
-
-If you wish to build for an architecture other than your current one you can install `qemu-user-static` and specify a different architecture's container image such as `arm64v8/ubuntu:22.04`.
-(https://hub.docker.com/r/arm64v8/ubuntu/) or from other repositories TODO
-
-### Build Dependencies (debian/ubuntu example)
-
-```
-include::deps-debian.sh[]
-```
-### Environment Variables
-
-* Community Agent:
-
-```
-include::env-community-agent.sh[]
-```
-
-* Enterprise Agent: TODO
-
-* Enterprise Hub: TODO
-
-### Steps
-
-```
-include::builder.sh[]
 ```
 
 ## Prerequisites

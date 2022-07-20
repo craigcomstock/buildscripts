@@ -1,4 +1,3 @@
-cd /cfe
 ./buildscripts/build-scripts/autogen
 ./buildscripts/build-scripts/clean-buildmachine
 ./buildscripts/build-scripts/build-environment-check
