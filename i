@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 set -i
 set -x
+#./build.sh env-community-agent.sh
+#exit 0
 #asciidoctor README.adoc
 #exit 0
 command -v parallel >/dev/null || brew install parallel

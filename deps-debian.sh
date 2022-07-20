@@ -3,6 +3,7 @@ echo "Installing build dependencies"
 apt update -y
 apt upgrade -y
 apt install -y \
+  git \
   autoconf \
   automake \
   m4 \
@@ -39,5 +40,5 @@ apt purge -y \
   emacs \
   emacs24 \
   libltdl-dev \
-  libltdl7 \
+  libltdl7
 apt install -y curl # as it seems wget is broken maybe? or maybe just on ubuntu, for install-dependencies

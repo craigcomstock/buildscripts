@@ -1,5 +1,27 @@
 # Buildscripts README
 
+## Basic Usage
+
+A pre-requisite is to have necessary repositories checked out along-side each other.
+
+A minimal example would be to build packages for cfengine community agent.
+
+```
+include::checkout-community-agent.sh[]
+```
+
+Set some environment variables:
+
+```
+include::env-community-agent.sh[]
+```
+
+And execute the build steps:
+
+```
+include::build-community-agent.sh[]
+```
+
 ## Minimal Build Example (using containers with buildah)
 
 Here we give a minimal build example using a linux container, setting environment variables "manually" and running a series of commands.
