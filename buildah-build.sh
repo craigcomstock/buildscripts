@@ -4,18 +4,21 @@ set -x
 # TODO parameterize this so we can just
 # buildah from whatever(ubuntu, debian, rhel, centos, alpine, freebsd)
 # and have the rest of the business "just work"
-PLATFORM=x86_64_linux_ubuntu_20
+#PLATFORM=x86_64_linux_ubuntu_20
+PLATFORM=x86_64_linux_debian_11
+#IMAGE_NAME="ubuntu"
+IMAGE_NAME="debian"
 # BASE_IMAGE is the operating system + build dependency packages installed
 # TODO refresh this periodically with apt-get update apt-get upgrade apt-get clean apt-get autoclean apt-get autoremove
 BASE_IMAGE="builder:$PLATFORM-base"
 
 NTECH_ROOT=/northern.tech
 
-BUILDER_NAME="ubuntu-builder"
-buildah rm "$BUILDER_NAME"
+BUILDER_NAME="cfengine-builder"
+buildah rm "$BUILDER_NAME" || true
 
 if ! buildah images --quiet "$BASE_IMAGE"; then
-  tmp=$(buildah from ubuntu)
+  tmp=$(buildah from ${IMAGE_NAME})
   # TODO make more different scripts or even policy to install deps on various platforms
   buildah copy $tmp deps-debian.sh
   # TODO add DEBIAN_FRONTEND=noninteractive here to avoid tzdata prompts?
