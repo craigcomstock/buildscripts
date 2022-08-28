@@ -131,6 +131,9 @@ do
     x86|x64)
         crossver=+mingw$ARCH
         cross=$ARCH;;
+    armhf)
+        crossver=+$ARCH
+        cross=$ARCH;;
     *)
         crossver=
         cross=native;;

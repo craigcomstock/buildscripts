@@ -85,6 +85,8 @@ case "$TARGET" in
         ARCH_OPTIONS="-ti686-w64-mingw32";;
       x64)
         ARCH_OPTIONS="-tx86_64-w64-mingw32";;
+      armhf)
+        ARCH_OPTIONS="-someting"
       *)
         fatal "Unknown architecture: $ARCH" 2>&1;;
     esac
@@ -92,6 +94,7 @@ case "$TARGET" in
     # Architecture needs to be the build machine architecture, since we will
     # install the package on that machine afterwards and the package
     # architecture needs to match.
+    # What to do in case of armhf? How to install on aarch64?
     case "$(uname -m)" in
       i*86)
         ARCH_OPTIONS="$ARCH_OPTIONS -ai386";;

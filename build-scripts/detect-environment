@@ -25,6 +25,10 @@ detect_labels()
       CROSS_TARGET=${CROSS_TARGET:-x86-mingw}
       export CROSS_TARGET
       ;;
+    *_armhf*)
+      CROSS_TARGET=${CROSS_TARGET:-armhf}
+      export CROSS_TARGET
+      ;;
   esac
 }
 
@@ -303,6 +307,8 @@ detect_arch()
       ARCH=x86;;
     x64-*)
       ARCH=x64;;
+    armhf*)
+      ARCH=armhf;;
     *)
       echo "Unknown cross-compilation target: $CROSS_TARGET"
       exit 42;;

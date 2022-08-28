@@ -68,6 +68,7 @@ if [ "x$OS" = "xrhel" ] && [ "x${VER:0:1}" = "x8" ]; then
   var_append ARGS "--with-selinux-policy"
 fi
 
+# TODO maybe add bits here to cross compile to arm32
 # Cross-compiling Windows?
 case "$ARCH-${OS_FAMILY}" in
   x86-mingw)  var_append ARGS "--host=i686-w64-mingw32"   ;;
