@@ -5,8 +5,10 @@ on: [pull_request, push]
 jobs:
   build:
     name: multi-repo build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
+    - name: Check MacOS gcc
+      run: which gcc && gcc --version
     - uses: actions/github-script@v6
       id: get_together_prs
       with:
