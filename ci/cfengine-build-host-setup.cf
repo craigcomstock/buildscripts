@@ -162,7 +162,7 @@ bundle agent cfengine_build_host_setup
     (redhat_7|centos_7|redhat_8|centos_8|redhat_9).(!have_development_tools).(yum_conf_ok.dnf_conf_ok)::
       "yum groups install -y 'Development Tools'" contain => in_shell;
     (redhat_8|centos_8).!have_fakeroot:: # special fakeroot, missing from _8 an d up?
-      "sudo rpm -iv https://kojipkgs.fedoraproject.org//packages/fakeroot/1.23/1.fc29/x86_64/fakeroot-1.23-1.fc29.x86_64.rpm https://kojipkgs.fedoraproject.org//packages/fakeroot/1.23/1.fc29/x86_64/fakeroot-libs-1.23-1.fc29.x86_64.rpm"
+      "rpm -iv https://kojipkgs.fedoraproject.org//packages/fakeroot/1.23/1.fc29/x86_64/fakeroot-1.23-1.fc29.x86_64.rpm https://kojipkgs.fedoraproject.org//packages/fakeroot/1.23/1.fc29/x86_64/fakeroot-libs-1.23-1.fc29.x86_64.rpm"
         contain => in_shell;
     (redhat_8|centos_8|redhat_9).!redhat_has_python3::
       "yum install -y python3" -> { "CFE-4313" }
@@ -218,7 +218,8 @@ bundle agent cfengine_build_host_setup
       "yum install -y perl" contain => in_shell,
         comment => "Apparently rhel-8 is a bit psychotic in that it has perl installed in /bin/perl in the base install but the perl package is not installed. Cant use package_method as perl would cause perl-*.* to be installed, e.g. every perl module which would certainly cause conflicts and nobest problems.";
     redhat_8|centos_8|redhat_9::
-      "sudo sed -ri 's/^%_enable_debug_packages/#\0/' /usr/lib/rpm/redhat/macros" contain => in_shell;
+      "sed -ri 's/^%_enable_debug_packages/#\0/' /usr/lib/rpm/redhat/macros" contain => in_shell,
+        if => fileexists("/usr/lib/rpm/redhat/macros"); # TODO what causes this to exist? install of rpmtools package or something?
 # todo, need 2.7pip psycopg2-binary for ubuntu-20 as well?
     debian_11.!have_pip2::
       "wget https://bootstrap.pypa.io/pip/2.7/get-pip.py -O get-pip.py && python2 get-pip.py && pip install psycopg2-binary"
@@ -243,10 +244,6 @@ bundle agent cfengine_build_host_setup
     !have_sys_user.(suse|sles|opensuse)::
       "useradd -u 3 sys" contain => in_shell;
 
-# skip /etc/hosts change for now, seems kind of wrong and corrupts ip6 entries like `::1 ip6-ip6-loopback`
-# maybe the following is needed to silence such errors as:     ubuntu-16-mingw-j1: sudo: unable to resolve host localhost.localdomain
-#    ubuntu::
-#      "${paths.sed} -ri 's/localhost //' /etc/hosts";
 }
 # todo, maybe need
 # ubuntu16-mingw: echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections

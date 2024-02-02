@@ -27,10 +27,15 @@ function cleanup()
   fi
   echo "Ensuring CFEngine fully uninstalled/cleaned up"
   rm -rf /var/cfengine /opt/cfengine /var/log/CFE* /var/log/postgresql.log || true
-  pkill -9 cf-agent || true
-  pkill -9 cf-serverd || true
-  pkill -9 cf-monitord || true
-  pkill -9 cf-execd || true
+  if command -v pkill; then
+    pkill -9 cf-agent || true
+    pkill -9 cf-serverd || true
+    pkill -9 cf-monitord || true
+    pkill -9 cf-execd || true
+  else
+    echo "No pkill available. Maybe some cf procs left over?"
+    ps -efl | grep cf
+  fi
 }
 
 trap cleanup ERR
@@ -43,7 +48,11 @@ if [ -f /etc/os-release ]; then
   if grep rhel /etc/os-release; then
     yum upgrade --assumeyes
   elif grep debian /etc/os-release; then
-    DEBIAN_FRONTEND=noninteractive apt upgrade --yes && DEBIAN_FRONTEND=noninteractive apt autoremove --yes
+    export DEBIAN_FRONTEND=noninteractive
+    apt update
+    apt upgrade --yes
+    apt autoremove --yes
+    apt install --yes curl
   elif grep suse /etc/os-release; then
     zypper -n update
   else
