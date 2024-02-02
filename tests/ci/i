@@ -1,0 +1,3 @@
+cf-promises -f ../../ci/cfengine-build-host-setup.cf
+./docker.sh redhat-8
+less redhat-8.log
