@@ -1,0 +1,60 @@
+Sun Feb  4 07:55:45 CST 2024
+results of aws-golden-image.sh
+
+? ./aws-golden-image.sh 
+### get latest ami for platform debian-10 ###
+"ami-0234c545e7f8e80d4"
+### get latest ami for platform debian-11 ###
+"ami-0f20d40f8640bb346"
+### get latest ami for platform debian-12 ###
+"ami-09f356378c9576a6a"
+### get latest ami for platform debian-9 ###
+null
+### get latest ami for platform redhat-6 ###
+null
+### get latest ami for platform redhat-7 ###
+"ami-00342897eb8ba6355"
+### get latest ami for platform redhat-8 ###
+"ami-083a0ff0ee6ffe5cb"
+### get latest ami for platform redhat-9 ###
+"ami-0e8fb3f6bd012277f"
+### get latest ami for platform suse-12 ###
+"ami-0d78dc4fdb90d28a2"
+### get latest ami for platform suse-15 ###
+"ami-0e6e78596f3522ace"
+### get latest ami for platform ubuntu-16 ###
+null
+### get latest ami for platform ubuntu-18 ###
+"ami-0bb220fc4bffd88dd"
+### get latest ami for platform ubuntu-20 ###
+"ami-07e4e8101a24d7fb5"
+### get latest ami for platform ubuntu-22 ###
+"ami-08a4226735d7b809b"
+
+so pretty good, we would need debian-9, redhat-6, ubuntu-16 as those are never "latest" what are we using RN?
+redhat-6
+ami-00a5cc8dc6fb7552d
+owner: 304194462000
+name centos-6-x64
+# probably OUR image!?
+debian-9
+ami-07a0560634acb945f
+owner 379101102735
+name debian-stretch-hvm-x86_64-gp2-2019-09-08-17994
+ubuntu-16
+ami-0d03add87774b12c5
+owner 099720109477
+name ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190913
+
+owner-alias - The owner alias (amazon | aws-marketplace ). The valid aliases are defined in an Amazon-maintained list. This is not the Amazon Web Services account alias that can be set using the IAM console. We recommend that you use the Owner request parameter instead of this filter.
+owner-id - The Amazon Web Services account ID of the owner. We recommend that you use the Owner request parameter instead of this filter.
+
+
+aws ec2 describe-images \
+    --owners amazon \
+    --filters "Name=platform,Values=windows" "Name=root-device-type,Values=ebs"
+
+nope
+--owners (list)
+
+Scopes the results to images with the specified owners. You can specify a combination of Amazon Web Services account IDs, self , amazon , and aws-marketplace . If you omit this parameter, the results include all images for which you have launch permissions, regardless of ownership.
