@@ -80,6 +80,15 @@ function owner_from_ami
 {
   echo TODO, for manually finding owner-id and name patterns based on ami
 }
+function spawn_instance
+{
+  # $1 = platform
+  platform=$1
+  ami=$(latest_ami $platform)
+  key_name=craig
+  instance_type=t3a.micro
+  aws ec2 run-instances --image-id $ami --key-name $key_name --instance-type $instance_type
+}
 
 #banner bootstrap
 
@@ -104,8 +113,15 @@ function owner_from_ami
 if [ -z "$1" ]; then
   while IFS= read -r platform
   do
-    latest_ami $platform
+    spawn_instance $platform
+    # todo how to know when ready and get connection info?
+#--user-data (string)
+#
+#The user data script to make available to the instance. For more information, see Run commands on your Linux instance at launch and Run commands on your Windows instance at launch . If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.
+#
+#so send in what we already send :)
+#instances -> state -> code (0=pending)
   done < <(get_platforms)
 else
-  echo $1
+  spawn_instance $platform
 fi
