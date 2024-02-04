@@ -1,0 +1,80 @@
+#!/bin/sh
+
+. `dirname "$0"`/functions
+. detect-environment
+. compile-options
+
+# We use packaging scripts
+PATH=$PATH:$BASEDIR/buildscripts/deps-packaging
+
+# Not all dependencies support building in parallel.
+MAKEFLAGS=-j1
+
+set -x
+
+# This should be already set from sourcing "functions" at the top, but
+# make sure, because we don't want build-artifacts-cache to have bogus
+# packages.
+set -e
+
+# non-gnu exotics don't support sed -i,
+# and only hub or deb packages use files mentioned below
+if [ "$BUILDPREFIX" != "/var/cfengine" -a \( "$DEP_PACKAGING" = "deb" -o "$ROLE" = hub \) ]
+then
+    # Apply necessary changes for alternate prefix
+    sed -i "s:/var/cfengine:$BUILDPREFIX:"  \
+        $BASEDIR/buildscripts/deps-packaging/*/debian/*.install  \
+        $BASEDIR/buildscripts/deps-packaging/*/mingw/debian/*.install \
+        $BASEDIR/buildscripts/deps-packaging/apache/httpd.conf
+fi
+
+# Override for manual testing
+if [ "x$1" != x ]
+then
+    DEPS="$@"
+fi
+
+
+for dep in $DEPS
+do
+    case "$BUILD_TYPE" in
+    DEBUG|CODE_COVERAGE)
+        optimize=yes
+        debugsym=no
+        versuffix=+untested
+        tests=no;;
+    RELEASE)
+        optimize=yes
+        debugsym=no
+        versuffix=+release
+        tests=yes;;
+    *)
+        echo "Unknown build type: $BUILD_TYPE"
+        exit 42;;
+    esac
+
+    case "$ARCH" in
+    x86|x64)
+        crossver=+mingw$ARCH
+        cross=$ARCH;;
+    *)
+        crossver=
+        cross=native;;
+    esac
+
+    revision=$(cat $BASEDIR/buildscripts/deps-packaging/revision)
+    if [ "$BUILDPREFIX" != "/var/cfengine" ]
+    then
+        safe_prefix="+$(echo "$PREFIX" | sed 's:/::g')"
+    fi
+    version=0+$revision$versuffix$crossver$safe_prefix
+
+    # FETCH dependency packages if needed
+    package_files=`pkg-cache listpkgfiles $dep-$version`
+
+    # If package cache did not have the packages
+    if [ x"$package_files" = x ]
+    then
+        echo "No cache for package $dep"
+    fi
+done
