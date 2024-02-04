@@ -58,3 +58,69 @@ nope
 --owners (list)
 
 Scopes the results to images with the specified owners. You can specify a combination of Amazon Web Services account IDs, self , amazon , and aws-marketplace . If you omit this parameter, the results include all images for which you have launch permissions, regardless of ownership.
+
+so this is "us", yes, "me" aka ntdev account
+? aws ec2 describe-images --owner 304194462000 --output json --region us-east-2 | jq .Images.[].Name
+"win-acceptance-2023-10-25"
+"centos-7-x64"
+"centos-6-x64"
+three images, saved because others are too old
+? aws ec2 describe-images --owner 379101102735 --output json --region us-east-2 | jq .Images.[].Name
+"debian-stretch-hvm-x86_64-gp2-2022-03-25-58319"
+"debian-stretch-hvm-arm64-gp2-2022-03-09-63885"
+"debian-stretch-hvm-arm64-gp2-2022-03-25-58341"
+"debian-stretch-hvm-x86_64-gp2-2022-03-09-63938"
+"debian-stretch-hvm-x86_64-gp2-2022-07-01-66430"
+
+not sure who that is
+found in community AMIs
+debian-stretch-hvm-x86_64-gp2-2022-03-25-58319
+ami-05df299f946cd43a2
+FAI Debian Image
+
+OwnerAlias: –
+Platform: Debian
+Architecture: x86_64
+Owner: 379101102735
+Publish date: 2022-03-25
+Root device type: ebs
+Virtualization: hvm
+ENA enabled: Yes
+Select
+
+https://wiki.debian.org/Cloud/AmazonEC2Image/Stretch
+
+Both are owned by AWS account ID 379101102735.
+
+
+
+so legit!@
+
+AMI names
+
+debian-stretch-hvm-arm64-gp2-2021-12-30-21785
+debian-stretch-hvm-x86_64-gp2-2022-07-01-66430
+Both are owned by AWS account ID 379101102735.
+
+tons of images in ubuntu :(
+
+? aws ec2 describe-images --owner 099720109477 --output json --region us-east-2 | jq .Images.[].Name | wc -l
+1656
+
+https://canonical-aws.readthedocs-hosted.com/en/latest/aws-how-to/instances/find-ubuntu-images/
+
+099720109477 (in the default partition)
+
+
+yep, checks
+
+different name scheme
+? aws ec2 describe-images --owner 099720109477 --output json --region us-east-2 | jq .Images.[].Name | grep 16.04
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20230912"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231018"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231020"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20240125"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20240110"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20221202"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231010"
+"ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231207"

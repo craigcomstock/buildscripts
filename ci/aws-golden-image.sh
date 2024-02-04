@@ -34,15 +34,26 @@ case $distribution in
     name_pattern="suse-sles-$version*"
     ;;
   redhat)
-    owner_id=309956199498
-    name_pattern="RHEL-$version*"
+    if [ "$version" -le 7 ]; then
+#      owner_id=379101102735 # ntdev aka us
+      owner_id=304194462000 # ntdev aka us
+      name_pattern="centos-$version-x64"
+    else
+      owner_id=309956199498 # https://access.redhat.com/articles/2962171
+      name_pattern="RHEL-$version*"
+    fi
     ;;
   debian)
-    owner_id=136693071363
-    name_pattern="debian-$version*" # e.g. debian-12-amd64-20231013-1532
+    if [ "$version" = "9" ]; then
+     owner_id=379101102735 # aka stretch, https://wiki.debian.org/Cloud/AmazonEC2Image/Stretch
+     name_pattern="debian-stretch-hvm-x86_64*"
+    else
+      owner_id=136693071363 # https://wiki.debian.org/Cloud/AmazonEC2Image/Bullseye
+      name_pattern="debian-$version*" # e.g. debian-12-amd64-20231013-1532
+    fi
     ;;
   windows)
-    owner_id=801119661308
+    owner_id=801119661308 # amazon https://docs.aws.amazon.com/powershell/latest/userguide/pstools-ec2-get-amis.html
     name_pattern="Windows_Server-$version*" # e.g. Windows_Server-2022-English-Full-Base-2024.01.16
     ;;
   macos)
@@ -50,8 +61,12 @@ case $distribution in
     name_pattern="amxn-ec2-macos-$version*" # e.g. amzn-ec2-macos-14.2.1-20240117-170221
     ;;
   ubuntu)
-    owner_id=099720109477
-    name_pattern="ubuntu/images/hvm-ssd/ubuntu-*-$version*" # e.g. ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20231207
+    owner_id=099720109477 # https://canonical-aws.readthedocs-hosted.com/en/latest/aws-how-to/instances/find-ubuntu-images/
+    if [ "$version" = "16" ]; then
+      name_pattern="ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server*"
+    else
+      name_pattern="ubuntu/images/hvm-ssd/ubuntu-*-$version*" # e.g. ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20231207
+    fi
     ;;
   *)
     echo "Dont know owner_id for distribution $distribution"
