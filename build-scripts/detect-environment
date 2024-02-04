@@ -238,7 +238,9 @@ detect_distribution()
 
 detect_packaging()
 {
-  if [ -f /bin/rpm ]; then
+  if [ -n "$DEP_PACKAGING" ]; then
+    echo "Using environment DEP_PACKAGING: $DEP_PACKAGING"
+  elif [ -f /bin/rpm ]; then
     DEP_PACKAGING=rpm
   elif [ -f /usr/bin/dpkg ]; then
     DEP_PACKAGING=deb
@@ -270,6 +272,10 @@ detect_packaging()
 
 detect_arch()
 {
+  if [ -n "$ARCH" ]; then
+    echo "Using environment ARCH: $ARCH"
+    return
+  fi
   case "$DEP_PACKAGING" in
     deb)
       ARCH=`dpkg --print-architecture`;;

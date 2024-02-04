@@ -1,1 +1,27 @@
-./aws-golden-image.sh suse-12
+#!/usr/bin/env bash
+set -ex
+# find the dir two levels up from here, home of all the repositories
+COMPUTED_ROOT="$(readlink -e "$(dirname "$0")/../../")"
+# NTECH_ROOT should be the same, but if available use it so user can do their own thing.
+NTECH_ROOT=${NTECH_ROOT:-$COMPUTED_ROOT}
+export ARCH=x86_64 # suse-15 rpm --eval '%{_arch}'
+export BUILD_TYPE=DEBUG
+export DEP_PACKAGING=rpm # e.g. suse-12
+export PATH=$NTECH_ROOT/buildscripts/build-scripts:$PATH
+export PROJECT=nova # or empty for community?
+cd "$NTECH_ROOT"
+# cat: /Users/craig/cfe/buildscripts/ci/buildscripts/deps-packaging/revision: No such file or directory
+# this is made by autogen I believe
+./buildscripts/build-scripts/autogen
+# faster than autogen, just put the revision file in deps-packaging like autogen script does, we can defer autogen to build hosts?
+# Jenkins has not assigned a LABEL to this node, you are probably building manually; disabling remote sftp cache
+export label=PACKAGES_x86_64_linux_suse_15
+export JOB_BASE_NAME=label=$label
+# ++ pkg-cache listpkgfiles libcurl-0+ecce3fe+untested
+#sftp>                 cd buildscripts_cache/dirs/PACKAGES_x86_64_linux_suse_15/libcurl-0+ecce3fe+untested
+#realpath /home/jenkins_sftp_cache/buildscripts_cache/dirs/PACKAGES_x86_64_linux_suse_15/libcurl-0+ecce3fe+untested: No such file
+# manually going there I see
+# sftp -i ~/.ssh/sftp-cache.id_ed25519 -o GSSAPIAuthentication=no -o PreferredAuthentications=publickey jenkins_sftp_cache@build-artifacts-cache.cloud.cfengine.com
+# libcurl-0+235dc74+release       libcurl-0+235dc74+untested      libcurl-0+8b82437+release       libcurl-0+8b82437+untested      libcurl-0+a2f3c6e+untested
+download-dependencies
+#./aws-golden-image.sh suse-12
