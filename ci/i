@@ -14,9 +14,11 @@ export PROJECT=nova # or empty for community?
 # this is made by autogen I believe
 #./buildscripts/build-scripts/autogen
 # faster than autogen, just put the revision file in deps-packaging like autogen script does, we can defer autogen to build hosts?
-cd "$NTECH_ROOT"/buildscripts/deps-packaging
-git log --pretty='format:%h' -1 -- . > revision
-cd -
+#cd "$NTECH_ROOT"/buildscripts/deps-packaging
+#git log --pretty='format:%h' -1 -- . > revision
+#cd -
+# but autogen is required on this system in order that bootstrap-tarballs will work
+autogen
 # Jenkins has not assigned a LABEL to this node, you are probably building manually; disabling remote sftp cache
 export label=PACKAGES_x86_64_linux_suse_15
 export JOB_BASE_NAME=label=$label
@@ -28,4 +30,7 @@ export JOB_BASE_NAME=label=$label
 # libcurl-0+235dc74+release       libcurl-0+235dc74+untested      libcurl-0+8b82437+release       libcurl-0+8b82437+untested      libcurl-0+a2f3c6e+untested
 download-dependencies
 find $HOME/.cache -path '*PACKAGES_x86_64_linux_suse_15/*' -print0 | xargs -0 tar -czf suse-15-pkg-cache.tgz
+
+bootstrap-tarballs
+# bootstrap-tarballs doesn't work due ot core C compiler cannot create executables, aka macos, huh?
 #./aws-golden-image.sh suse-12
