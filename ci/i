@@ -1,3 +1,5 @@
+./aws-golden-image.sh suse-12
+exit 0
 #!/usr/bin/env bash
 set -ex
 # find the dir two levels up from here, home of all the repositories
@@ -33,4 +35,3 @@ find $HOME/.cache -path '*PACKAGES_x86_64_linux_suse_15/*' -print0 | xargs -0 ta
 
 bootstrap-tarballs
 # bootstrap-tarballs doesn't work due ot core C compiler cannot create executables, aka macos, huh?
-#./aws-golden-image.sh suse-12

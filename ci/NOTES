@@ -124,3 +124,21 @@ different name scheme
 "ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20221202"
 "ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231010"
 "ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server-20231207"
+Mon Feb  5 10:49:03 CST 2024
+
+need to use 
+
+aws ec2 create-image \
+    --instance-id i-1234567890abcdef0 \
+    --name "My server" \
+    --description "An AMI for my server"
+
+instead of create-snapshot
+
+also need to delete the previous golden image? or delete <= n-2 images, leave the previous but how to tag/re-tag for use?
+
+? aws ec2 create-image --instance-id i-0e86dfb3d7893a4aa --name "suse-12-build-host" --description "2024-02-05 suse-12 official ami, updated, testing pass, cleaned up"
+{
+    "ImageId": "ami-07eb5eaf94c7e5739"
+}
+

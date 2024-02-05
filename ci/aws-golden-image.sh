@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 # find the dir two levels up from here, home of all the repositories
 COMPUTED_ROOT="$(readlink -e "$(dirname "$0")/../../")"
@@ -22,7 +22,7 @@ function banner
 function latest_ami
 {
   platform=$1
-banner get latest ami for platform $1
+#banner get latest ami for platform $1
 # platform is like suse-12 suse-15 debian-9 redhat-8 ubuntu-18
 #platform=redhat-8
 #platform=suse-12
@@ -74,7 +74,7 @@ case $distribution in
     ;;
 esac
 ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=x86_64" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region us-east-2 | jq .[0].ImageId)
-echo $ami
+echo $ami | sed 's/"//g'
 }
 function owner_from_ami
 {
@@ -82,12 +82,12 @@ function owner_from_ami
 }
 function spawn_instance
 {
-  # $1 = platform
   platform=$1
   ami=$(latest_ami $platform)
   key_name=craig
   instance_type=t3a.micro
-  aws ec2 run-instances --image-id $ami --key-name $key_name --instance-type $instance_type
+  security_group_id=sg-0f25f4265e18f45ee
+  aws ec2 run-instances --image-id $ami --key-name $key_name --instance-type $instance_type --security-group-ids $security_group_id
 }
 
 #banner bootstrap
@@ -123,5 +123,5 @@ if [ -z "$1" ]; then
 #instances -> state -> code (0=pending)
   done < <(get_platforms)
 else
-  spawn_instance $platform
+  spawn_instance $1
 fi
