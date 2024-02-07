@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
 # find the dir two levels up from here, home of all the repositories
 COMPUTED_ROOT="$(readlink -e "$(dirname "$0")/../../")"
@@ -113,7 +113,9 @@ function spawn_instance
 if [ -z "$1" ]; then
   while IFS= read -r platform
   do
-    spawn_instance $platform
+     ami=$(latest_ami $platform)
+     echo "$platform <ami>$ami</ami>"
+#    spawn_instance $platform
     # todo how to know when ready and get connection info?
 #--user-data (string)
 #
