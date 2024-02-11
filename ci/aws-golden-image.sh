@@ -12,7 +12,7 @@ function get_platforms
 #awk 'FNR==NR {a[$1];next} !($1 in a)' ${NTECH_ROOT}/buildscripts/build-scripts/exotics.txt  ${NTECH_ROOT}/buildscripts/build-scripts/labels.txt  | sed 's/PACKAGES.*linux_//' | sed '/mingw/d' | sort -u | sed 's/_/-/'
 
 # get all linux including exotics
-cat "${NTECH_ROOT}/buildscripts/build-scripts/labels.txt" | grep '_linux_' | sed 's/PACKAGES.*linux_//' | sort -u | sed 's/_/-/'
+awk 'BEGIN{FS="_"}/linux/ && !/HUB/{print $5"-"$6"-"$2}' "${NTECH_ROOT}/buildscripts/build-scripts/labels.txt" | sort -u
 }
 function banner
 {
@@ -28,6 +28,7 @@ function latest_ami
 #platform=suse-12
 distribution=$(echo $platform | cut -d- -f1)
 version=$(echo $platform | cut -d- -f2)
+arch=$(echo $platform | cut -d- -f3)
 case $distribution in
   suse)
     owner_id=013907871322
@@ -65,7 +66,7 @@ case $distribution in
     if [ "$version" = "16" ]; then
       name_pattern="ubuntu-pro-server/images/hvm-ssd/ubuntu-xenial-16.04-amd64-pro-server*"
     else
-      name_pattern="ubuntu/images/hvm-ssd/ubuntu-*-$version*" # e.g. ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20231207
+      name_pattern="ubuntu/images/hvm-ssd/ubuntu-*-$version*"
     fi
     ;;
   *)
@@ -73,7 +74,15 @@ case $distribution in
     exit 1
     ;;
 esac
-ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=x86_64" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region us-east-2 | jq .[0].ImageId)
+#echo "Looking for ami from owner $owner_id, name_pattern $name_pattern and architecture $arch"
+if [ "$arch" = "x86" ]; then
+  architecture="x86_64"
+elif [ "$arch" = "arm" ]; then
+  architecture="arm64"
+else
+  echo "unknown architecture $arch"
+fi
+ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region eu-west-1 | jq .[0].ImageId)
 echo $ami | sed 's/"//g'
 }
 function owner_from_ami
@@ -109,6 +118,7 @@ function spawn_instance
 #name is             "Name": "suse-sles-15-sp5-v20240129-hvm-ssd-x86_64",
 #so I could query name for suse-sles-15.*
 
+# main
 
 if [ -z "$1" ]; then
   while IFS= read -r platform
