@@ -83,6 +83,7 @@ else
   echo "unknown architecture $arch"
 fi
 ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region eu-west-1 | jq .[0].ImageId)
+#ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region us-east-2 | jq .[0].ImageId)
 echo $ami | sed 's/"//g'
 }
 function owner_from_ami
@@ -91,6 +92,7 @@ function owner_from_ami
 }
 function spawn_instance
 {
+  set -x
   platform=$1
   ami=$(latest_ami $platform)
   key_name=craig
