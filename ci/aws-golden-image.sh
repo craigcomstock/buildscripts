@@ -22,6 +22,7 @@ function banner
 function latest_ami
 {
   platform=$1
+  region=${2:-us-west-1}
 #banner get latest ami for platform $1
 # platform is like suse-12 suse-15 debian-9 redhat-8 ubuntu-18
 #platform=redhat-8
@@ -82,7 +83,7 @@ elif [ "$arch" = "arm" ]; then
 else
   echo "unknown architecture $arch"
 fi
-ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region eu-west-1 | jq .[0].ImageId)
+ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region $region | jq .[0].ImageId)
 #ami=$(aws ec2 describe-images --owner $owner_id --filters "Name=name,Values=${name_pattern}" "Name=virtualization-type,Values=hvm" "Name=architecture,Values=${architecture}" --query 'sort_by(Images[].{YMD:CreationDate,Name:Name,ImageId:ImageId},&YMD)|reverse(@)' --output json --region us-east-2 | jq .[0].ImageId)
 echo $ami | sed 's/"//g'
 }
@@ -123,19 +124,24 @@ function spawn_instance
 # main
 
 if [ -z "$1" ]; then
-  while IFS= read -r platform
-  do
-     ami=$(latest_ami $platform)
-     echo "$platform <ami>$ami</ami>"
-#    spawn_instance $platform
-    # todo how to know when ready and get connection info?
-#--user-data (string)
-#
-#The user data script to make available to the instance. For more information, see Run commands on your Linux instance at launch and Run commands on your Windows instance at launch . If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.
-#
-#so send in what we already send :)
-#instances -> state -> code (0=pending)
-  done < <(get_platforms)
+  for region in eu-west-1 us-east-2; do
+    echo
+    echo "### $region ###"
+    echo
+    while IFS= read -r platform
+    do
+       ami=$(latest_ami $platform $region)
+       echo "$platform <ami>$ami</ami>"
+  #    spawn_instance $platform
+      # todo how to know when ready and get connection info?
+  #--user-data (string)
+  #
+  #The user data script to make available to the instance. For more information, see Run commands on your Linux instance at launch and Run commands on your Windows instance at launch . If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.
+  #
+  #so send in what we already send :)
+  #instances -> state -> code (0=pending)
+    done < <(get_platforms)
+  done
 else
   spawn_instance $1
 fi
