@@ -1,0 +1,62 @@
+#!/bin/bash
+
+grep jenkins /etc/passwd || useradd -s /bin/bash jenkins
+
+mkdir -p /home/jenkins/.ssh
+chmod 0700 /home/jenkins
+cat <<EOF > /home/jenkins/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSMj1QeHDE+PNbALFo9RLQCkJL1vKtvAWmjtSdJg8lIuYWAmnnow4AWu7dw3RbLd1IyWIta2H8HRhD53kumUr9p1qLAvPmAZPija/TqjPwVtSgtxbsx5hXoFAPg6+OCnGIXzvtnFrme+YoGhX5ayq4xGrV7WmiLERzgRbfF86R6rZWdwsRq4nIc/Sz4DNI1FGdgwZu11xBlZDPdncst+ihPE9QP5gFgGcCCZ8yxJnZqgyan0B7+ZOaxs9K3y3BJYQTqRfv6/iYhiz5SpW9sYUvuCs6M4Y6dDQY+wDlYIUh3v7LnsmSBT8kBIpfJ2wm/p0ouXWa8eTRERomnKdflUwHoy+uskNWfBSndOuVd5MhKCAdSNM/r7Wpbi/6Sk3AfeoHaidDL+BGjcZlNqXRnSEEm8EppxUwbBF9Rt7NH8i2lSylZrmsdI6KNpDrIV200qcgUpkBLA87viB5HyB2M70JFxHo34h4GRFmFEyXiWxRUH0rWzJHu+B0p5yr7yFltbM= autobuild
+EOF
+chmod 0600 /home/jenkins/.ssh/authorized_keys
+
+cat <<EOF > /home/jenkins/.ssh/id_rsa
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1L5Sx0lSkYupXcc9Ea0lo+saib1gLtZMndULolArQg0+KSn1
+Hoq7l5vMVP5nMHcB8Y0BjMH78bvpuOwbk6CmF3HMLZ6HzIGn0PHfvPHfFuIKULZ4
+WPIxzVSQmdQsSgJkbtmgg6FUl9ZJ9XF2xBlTh0ueV72YqsVBcmrV9AMls91zoWpg
+HHn/gaiVOyja0Urqyjzj/LPI5ifVZxJd36HGVQd+YKRlvgWOKM6DlPhjq9/Vu+20
+9AYBcQnjFEN8lWkUnCdiSWDndMgLNH27/HTTkzXV/OrwynqG2Tycu0Oapofw9GDd
+YgEvRobX/dv6lGmyOF2KW4daMXIlWLTsaj4eiQIDAQABAoIBAQC032dzhbRMiAgj
+8evK5oH0/kLezoJC7/HN0r8EbdKJYsbxqnl7UQoy2MP9kxnaS6P8YRzrNlXk7RXG
+If9EITZ1AkxMkNb2GVm7PJkzhBRe2SlZ+/kP7kJHR1l1X72T4rrOv/pHT1ejjA3v
+PltyV/H7OmBSSqDMt85v38MtpatdYiFTrd1zcRyNxtEzBi1N23Fvhoj5VU5Es98h
+haAQA0s2uIjKu0zkjKMNlMzvH+i3+Xp87U/ss3wjKFF4vP8JODbCuyRdXZCIPlhr
+fltBYQW3eTlyuuy/ESrNZsa7M+Ky/XUmDAhxKp/qQMg5HqCcNh7gQVbPM21iYkcx
+MMsPw6KNAoGBAPn/jaPIVnsIjvtKMjImZbvtW92E2feTwRaYKhK10DYJkkOxu8cJ
+Y+8vHle3GZDWIvaqoypeZfRr8f+3l8yrkFS7wosiqvSzTOUrCYs7iU7QV3VF87xT
+WwBKIz3ovSsxPrgQiAaIJvkgvyWgPFTEBh8lsacrI7TE7EoSoTuH8b6PAoGBANnZ
+zvJvvWQtzvpUZBflLpjSJ9Z2BV2yc/W4PUU+I2wp5qaf8tgqNf4SKeUtIpj2nXA5
+SX1pesIYPuDtOYdxu2G1UQT3DpzyDMWzVysSSXmvrFXFVw61OPrKzT+W04DyAKbX
+xsfbt6pL8qTOzzTZpxXfHaH9prpAZ1LUR+Rud91nAoGAaYMeOJ35QfwevJhYDyp9
+jY9kUl4b0I4f1HVsbHEn62amwMNmyV6BOxXb7JFuzN5T61+hdeRZi4tzm8XU36EZ
+TWnhde+vz49NSPudD5KVJRpxjyFy+W0E315q+VodXPlvyyfPAVK9gC/9/NdgHzaM
+juDN1gwzCbyDLdAnFIUP1qkCgYEAhfDawkhdY4iep17Xo7FvMtqTT9KEfhVIIp3C
+Xh5UXR5uB6h0AOADDlFQnO1hRjbqmaM/QfJmXYvWrShtpI8SrIJ0a98ShwBzReJ8
+B6lYr46JILsSSaK2g8vI4f3z0GX6bJpiR2MZy4SijR3yXAYuKs5hQ8XWitEqNcz6
+3sHkxKUCgYBfomoYvm04MizqjL++G7u7AJ3vakEISXoFgAd+liNKpxxgSQLtjcUo
+Jqwwc/BtFsgO51QbCtKXprVpa6xWZjPzRtwW6Vx3TybfDnxp3QjfnNS/jlbExEDo
+WWeVuOY76abEp8HmGApwtJWDAz9pNWqRfN4VHvtHXVkglcJWddVtVw==
+-----END RSA PRIVATE KEY-----
+EOF
+chmod 0600 /home/jenkins/.ssh/id_rsa
+
+# github public keys from https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+cat > /home/jenkins/.ssh/known_hosts <<EOF
+build-artifacts-cache.cloud.cfengine.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6qcxCQgtubv9WEhrAyMEFFMLLEjirk0p0Ru+vATioEIyw7gBFfOWOp/dBfsF6fuiY1vt3IsBx4u1DkS4j8x7DjB8X2dIcBia2jt2D3sBdDFb/nc7Zn\
+WfFf/E7dWoiF0WKvxZ62RwjyZuyz9TmL1d3jlIyuRimkhgwnuRAMyymJ5YbxvvfTH01OuGS/0pkqkLAxomRyJTv6qcGr1rOPd5FuySwOO5M/tGkajJppKC+8u/RCyWfgu1khrBmi6PevXTaoJ/lQyexexZK0HVsA5G1U/+ipO18DqaCCAnHvZ/AKt+yYmoe9Rt\
+Lfx0T7DHinEV1yj4ynUj7EqudCrLOorg5
+github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+EOF
+chmod 0600 /home/jenkins/.ssh/known_hosts
+
+mkdir -p /home/jenkins/.parallel
+touch /home/jenkins/.parallel/will-cite
+
+echo 'export PKGS_SOURCE_URL="http://192.168.121.1"' >> /home/jenkins/.bashrc
+chown -R jenkins:jenkins /home/jenkins
+
+grep jenkins /etc/sudoers || cat <<EOF >> /etc/sudoers
+jenkins    ALL=(ALL)       NOPASSWD: ALL
+EOF
