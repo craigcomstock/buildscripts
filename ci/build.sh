@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
+set -ex
+_pwd=$(dirname "$0")
+source "${_pwd}"/sourceme.sh
 # build cfengine hub package
 set -ex
-export PROJECT=nova
-export NO_CONFIGURE=1
-export BUILD_TYPE=DEBUG
-export ESCAPETEST=yes
-export EXPLICIT_ROLE=hub
-export TEST_MACHINE=chroot
-
 set +x # hide secrets
 eval $(ssh-agent -s)
 if [ -z "$SECRET" ]; then
