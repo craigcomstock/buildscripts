@@ -8,7 +8,6 @@ jobs:
     steps:
       - name: Inspect workflow event
         run: |
-          echo ${toJSON(github.event)}
           echo ${github.event.organization.login}
 #  build_cfengine_hub_package:
 #    uses: ./.github/workflows/build-using-buildscripts.yml
