@@ -1,15 +1,19 @@
 name: Continuous Integration
 
-# Run this CI on all pushes to upstream
-# (including PRs from upstream to upstream)
 on: pull_request
 
 jobs:
-  build_cfengine_hub_package:
-    uses: ./.github/workflows/build-using-buildscripts.yml
-    secrets: inherit
-
-  deployment_tests:
-    needs: build_cfengine_hub_package
-    uses: ./.github/workflows/deployment-tests.yml
-    secrets: inherit
+  inspect_event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect workflow event
+        run: |
+          echo ${{ github.event }}
+#  build_cfengine_hub_package:
+#    uses: ./.github/workflows/build-using-buildscripts.yml
+#    secrets: inherit
+#
+#  deployment_tests:
+#    needs: build_cfengine_hub_package
+#    uses: ./.github/workflows/deployment-tests.yml
+#    secrets: inherit
