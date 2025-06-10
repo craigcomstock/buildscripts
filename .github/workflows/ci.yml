@@ -8,7 +8,8 @@ jobs:
     steps:
       - name: Inspect workflow event
         run: |
-          echo ${{ github.event }}
+          echo ${{ fromJSON(github.event) }}
+          echo ${{ github.event.organization }}
 #  build_cfengine_hub_package:
 #    uses: ./.github/workflows/build-using-buildscripts.yml
 #    secrets: inherit
