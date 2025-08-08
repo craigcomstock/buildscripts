@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Usage: PROJECT=[nova|community] ROLE=[hub|agent] ./buildscripts/build-scripts/compile
 #

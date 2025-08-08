@@ -603,7 +603,10 @@ run_and_print_on_failure()
     local temp_output_file
     temp_output_file=$(mktemp)
     local exit_code=0
-    if "$@" > "$temp_output_file" 2>&1; then
+    set -o pipefail
+    # TODO make optional env variable to stream these logs instead of being silent, good for a developer to "watch"
+    # sadly, we need to use bash instead of just sh in say the compile script so we can get the exit code from the command and not tee
+    if "$@" 2>&1 | tee "$temp_output_file"; then
         : # NOOP
     else
         exit_code=$? # Store exit code for later
