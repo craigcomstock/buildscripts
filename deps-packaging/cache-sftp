@@ -135,7 +135,8 @@ main()
                 rm -f * .DONE
                 # Any failure is considered "successful lookup but failed to
                 # find package in cache". It's hard to do otherwise.
-                retval=0
+                # todo provide optional ENV var like REQUIRE_SFTP_CACHE that will bomb if sftp cache fails, good for developers who want to get started quickly and not build all the dependencies, especially for hub builds
+                retval=42
             fi
 
             cd ..

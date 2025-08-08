@@ -31,9 +31,10 @@ CACHE_IS_ONLY_LOCAL=${CACHE_IS_ONLY_LOCAL:-no}
 label=${JOB_BASE_NAME#*=}
 if [ x"$label" = x ]
 then
-    echo "Jenkins has not assigned a LABEL to this node," \
+    echo "JOB_BASE_NAME is not defined, usually provided by jenkins, " \
          "you are probably building manually;" \
          "disabling remote sftp cache"  1>&2
+    exit 42 # use that same env var REQUIRE_SFTP_CACHE so this bombs out and lets the developer know what to define, e.g. JOB_BASE_NAME env var
     label=NO_LABEL
     CACHE_IS_ONLY_LOCAL=yes
 fi
