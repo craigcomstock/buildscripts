@@ -23,6 +23,19 @@ fi
 ssh-add -l
 set -x # stop hiding secrets
 
+# clone if needed
+# todo: if agent, reduce repo list
+for repo in core enterprise masterfiles nova mission-portal; do
+  if [ ! -d ./$repo ]; then
+    git clone git@github.com:cfengine/$repo --recursive
+    # todo check branch of buildscripts where we are and clone ^^^ accordingly
+  fi
+done
+
+if [ ! -f ./buildscripts/deps-packaging/revision ]; then
+  ./buildscripts/build-scripts/revision-file
+fi
+
 time ./buildscripts/build-scripts/install-dependencies
 time ./buildscripts/build-scripts/configure # 3 minutes locally
 time ./buildscripts/build-scripts/generate-source-tarballs # 1m49
