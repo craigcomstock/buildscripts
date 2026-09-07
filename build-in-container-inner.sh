@@ -57,6 +57,13 @@ for repo in $repos; do
             --exclude='revision' \
             --exclude='output' \
             --chown="$(id -u):$(id -g)" "$src/" "$BASEDIR/$repo/"
+
+        # Clean autotools files to avoid trouble with local system being rather different than container (e.g. macos -> linux)
+        # TODO: instead of git clean -xfd which could get rid of uncommitted work the developer wants to test, maybe do make clean or make distclean?
+        (
+            cd "$BASEDIR/$repo/"
+            git clean -xfd
+        )
     else
         echo "ERROR: Required repository $repo not found" >&2
         exit 1

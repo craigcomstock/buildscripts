@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# legacy bootstrap-tarballs was split into build-tarballs and bootstrap-mission-portal
+# legacy bootstrap-tarballs was split into three separate steps:
+#
+# - generate-pull-request-file
+# - build-tarballs
+# - bootstrap-mission-portal
+#
 # todo: remove this script when it is no longer called from anywhere
 set -e
 thisdir="$(dirname "$0")"
